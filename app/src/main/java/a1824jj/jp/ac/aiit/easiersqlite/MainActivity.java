@@ -1,16 +1,20 @@
 package a1824jj.jp.ac.aiit.easiersqlite;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
+import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -39,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
         this.contactsAppDatabase =
                 Room.databaseBuilder(getApplicationContext(),
                                      ContactsAppDatabase.class,
-                                     "ContactDB").build();
+                                     "ContactDB")
+                        .addCallback(this.callback). build();
 
 
         new GetAllContactsAsyncTask().execute();
@@ -212,4 +217,25 @@ public class MainActivity extends AppCompatActivity {
             contactsAdapter.notifyDataSetChanged();
         }
     }
+
+    RoomDatabase.Callback callback = new RoomDatabase.Callback() {
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+            Log.i("MainActivity","callback on create invoke");
+
+            createContact("name 1","email 1");
+            createContact("name 2","email 2");
+            createContact("name 3","email 3");
+            createContact("name 4","email 4");
+            createContact("name 5","email 5");
+
+        }
+
+        @Override
+        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+            super.onOpen(db);
+            Log.i("MainActivity","callback on open invoke");
+        }
+    };
 }
