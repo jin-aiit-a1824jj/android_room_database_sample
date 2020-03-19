@@ -20,7 +20,7 @@ public interface ContactDAO {
     public void deleteContact(Contact contact);
 
     @Query("select * from contacts")
-    public List<Contact> getConstacts();
+    public List<Contact> getContacts();
 
     @Query("select * from contacts where contact_id == :contactId ")
     public Contact getContact(long contactId);
